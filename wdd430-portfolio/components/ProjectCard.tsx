@@ -14,7 +14,7 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   return (
     <article className="rounded-xl border bg-white p-6 shadow-md">
-      <h2 className="mb-3 text-2xl font-bold">{title}</h2>
+      <h3 className="mb-3 text-2xl font-bold">{title}</h3>
 
       <p className="mb-4 text-gray-600">{description}</p>
 
