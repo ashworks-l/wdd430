@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get("type");
 
-    const projects = getProjects(type ?? undefined);
+    const projects = await getProjects(type ?? undefined);
 
     return NextResponse.json(projects, { status: 200 });
   } catch (error) {
