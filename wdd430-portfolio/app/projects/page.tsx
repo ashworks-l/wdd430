@@ -1,4 +1,5 @@
 
+import { Suspense } from "react";
 import ProjectList from "./ProjectList";
 
 export default function ProjectsPage() {
@@ -11,7 +12,9 @@ export default function ProjectsPage() {
         and school projects.
       </p>
 
-      <ProjectList apiUrl="/api/projects" />
+      <Suspense fallback={<p className="mt-4">Loading projects...</p>}>
+        <ProjectList />
+      </Suspense>
     </main>
   );
 }

@@ -1,49 +1,8 @@
 
-"use client";
+import { getProjects } from "@/lib/projects-db";
 
-import { useEffect, useState } from "react";
-
-type Project = {
-  id: number;
-  title: string;
-  description: string;
-  type: "opensource" | "school";
-  technologies: string[];
-};
-
-export default function ProjectList({ apiUrl }: { apiUrl: string }) {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch projects");
-        }
-
-        const data: Project[] = await response.json();
-        setProjects(data);
-      } catch {
-        setError("Could not load projects.");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProjects();
-  }, [apiUrl]);
-
-  if (loading) {
-    return <p className="mt-4">Loading projects...</p>;
-  }
-
-  if (error) {
-    return <p className="mt-4 text-red-600">{error}</p>;
-  }
+export default async function ProjectList() {
+  const projects = await getProjects();
 
   if (projects.length === 0) {
     return <p className="mt-4">No projects found.</p>;
