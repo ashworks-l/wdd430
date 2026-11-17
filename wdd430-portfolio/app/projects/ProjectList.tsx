@@ -1,32 +1,30 @@
 
-import { Project } from "@/lib/projects-db";
+import {
+  fetchFilteredProjects,
+  getProjects,
+} from "@/lib/projects-db";
 
 interface ProjectListProps {
   type?: "school" | "opensource";
+  query?: string;
+  currentPage?: number;
 }
 
 export default async function ProjectList({
   type,
+  query = "",
+  currentPage = 1,
 }: ProjectListProps) {
-  const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-  const url = type
-    ? `${baseUrl}/api/projects?type=${type}`
-    : `${baseUrl}/api/projects`;
-
-  const response = await fetch(url, {
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch projects");
-  }
-
-  const projects: Project[] = await response.json();
+  const projects = type
+    ? await getProjects(type)
+    : await fetchFilteredProjects(query, currentPage);
 
   if (projects.length === 0) {
-    return <p className="mt-4">No projects found.</p>;
+    return (
+      <p className="mt-6">
+        No projects found.
+      </p>
+    );
   }
 
   return (
@@ -36,11 +34,18 @@ export default async function ProjectList({
           key={project.id}
           className="rounded-lg border p-6 shadow-sm"
         >
-          <h2 className="text-xl font-bold">{project.title}</h2>
-          <p className="mt-2">{project.description}</p>
+          <h2 className="text-xl font-bold">
+            {project.title}
+          </h2>
+
+          <p className="mt-2">
+            {project.description}
+          </p>
+
           <p className="mt-3 text-sm font-semibold">
             Type: {project.type}
           </p>
+
           <p className="mt-2 text-sm">
             Technologies: {project.technologies.join(", ")}
           </p>
