@@ -1,5 +1,19 @@
 
+import { Suspense } from "react";
 import ProjectList from "../ProjectList";
+
+function SchoolProjectSkeleton() {
+  return (
+    <div className="mt-6 grid gap-6 md:grid-cols-2 animate-pulse">
+      {[1, 2].map((item) => (
+        <div
+          key={item}
+          className="h-40 rounded-lg bg-slate-200"
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function SchoolProjectsPage() {
   return (
@@ -10,7 +24,9 @@ export default function SchoolProjectsPage() {
         Here are my school projects.
       </p>
 
-      <ProjectList apiUrl="/api/projects?type=school" />
+      <Suspense fallback={<SchoolProjectSkeleton />}>
+        <ProjectList type="school" />
+      </Suspense>
     </main>
   );
 }
